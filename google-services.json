@@ -1,0 +1,119 @@
+{
+  "project_info": {
+    "project_number": "591604304431",
+    "firebase_url": "https://scada-android-22d24-default-rtdb.firebaseio.com",
+    "project_id": "scada-android-22d24",
+    "storage_bucket": "scada-android-22d24.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:591604304431:android:65665deb94d51088c2d4da",
+        "android_client_info": {
+          "package_name": "com.csgchangshin.ScadaVJ"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "591604304431-83qm4qbei29u9obi2oabi83ofqu0jjk2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB3v2XwhWyYrPAB7X4Oq8vd1dANZHspkv0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "591604304431-83qm4qbei29u9obi2oabi83ofqu0jjk2.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "591604304431-drm2v2n80f8ogljjkcttdgnql5vqfccs.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.csi.scadaIos.PushNotiSwiftUI"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:591604304431:android:d51b98dc20a36337c2d4da",
+        "android_client_info": {
+          "package_name": "com.example.asifkhan.customlistview"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "591604304431-83qm4qbei29u9obi2oabi83ofqu0jjk2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB3v2XwhWyYrPAB7X4Oq8vd1simudANZHspkv0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "591604304431-83qm4qbei29u9obi2oabi83ofqu0jjk2.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "591604304431-drm2v2n80f8ogljjkcttdgnql5vqfccs.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.csi.scadaIos.PushNotiSwiftUI"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:591604304431:android:d8dbdd99dd96879ac2d4da",
+        "android_client_info": {
+          "package_name": "com.example.csisystem"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "591604304431-83qm4qbei29u9obi2oabi83ofqu0jjk2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB3v2XwhWyYrPAB7X4Oq8vd1dANZHspkv0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "591604304431-83qm4qbei29u9obi2oabi83ofqu0jjk2.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "591604304431-drm2v2n80f8ogljjkcttdgnql5vqfccs.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.csi.scadaIos.PushNotiSwiftUI"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
