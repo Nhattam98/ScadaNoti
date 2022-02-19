@@ -16,16 +16,17 @@ import firebase from "firebase/compat/app";
 import "firebase/compat/firestore";
 import "firebase/compat/auth";
 import Loader from './Reload';
+import * as Notifications from "expo-notifications";
 
 export default function HomeScreen({ navigation }) {
     const [data, setdata] = useState([]);
     const [refreshing, setRefreshing] = useState(false);
     const [isLoading, setisLoading] = useState(false);
-    const loadData = () => {
+    const loadData = async() => {
         setisLoading(true);
         const data = [];
         try {
-            AsyncStorage.getItem('@email').then((user_data_json) => {
+            AsyncStorage.getItem('userData').then((user_data_json) => {
                 let user =
                     firebase.auth().currentUser?.email == null
                         ? user_data_json
@@ -40,6 +41,7 @@ export default function HomeScreen({ navigation }) {
                                 ...documentSnapshot.data(),
                                 key: documentSnapshot.id,
                             });
+                            
                         });
                         setdata(data);
                     });
@@ -59,6 +61,7 @@ export default function HomeScreen({ navigation }) {
     };
     useEffect(async () => {
         const unsubscribe = await navigation.addListener("focus", () => {
+            Notifications.setBadgeCountAsync(0);
             loadData();
         });
         return unsubscribe;
@@ -71,17 +74,10 @@ export default function HomeScreen({ navigation }) {
                 borderLeftWidth={1}
                 borderRightWidth={1}
                 _dark={{
-                    borderColor: "coolGray.600",
-                    backgroundColor: "gray.700",
-                }}
-                _web={{
-                    shadow: 2,
-                    borderWidth: 0,
-                }}
-                _light={{
-                    backgroundColor: "gray.50",
-                    borderColor: "coolGray.200",
-                }}
+                    borderColor: "gray.600",
+                  }}
+                  backgroundColor="white"
+                  borderColor="coolGray.200"
                 pl="4"
                 pr="5"
                 py="2"
@@ -184,7 +180,7 @@ export default function HomeScreen({ navigation }) {
                     }
                     data={data}
                     renderItem={_renderItem}
-                    keyExtractor={(item) => item.ORD}
+                    keyExtractor={(item, index) => index}
                 />
                 <Loader isLoading={isLoading} />
             </Box>
