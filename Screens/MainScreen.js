@@ -26,15 +26,32 @@ export default function MainScreen({ route, navigation }) {
     const [notification, setNotification] = useState(false);
     const notificationListener = useRef();
     const responseListener = useRef();
+    const db  = firebase.firestore();
+    // async function SaveTokenUser(email, token) {
+    //     await db
+    //         .collection("Tokens")
+    //         .doc(email + "|" + token)
+    //         .set(
+    //             {
+    //                 email: email,
+    //                 token: token,
+    //                 last_login: new Date().toLocaleString(),
+    //             },
+    //             { merge: true }
+    //         )
+    //         .then(function () {
+    //             setExpoPushToken(token);
+    //             storeTokenData(token);
+    //             console.log("Cấp token thành công!");
+    //         });
+    // }
     async function SaveTokenUser(email, token) {
-        await firebase
-            .firestore()
+        await db
             .collection("Tokens")
-            .doc(email + "|" + token)
+            .doc(email)
             .set(
                 {
                     email: email,
-                    token: token,
                     last_login: new Date().toLocaleString(),
                 },
                 { merge: true }
@@ -124,7 +141,7 @@ async function registerForPushNotificationsAsync() {
         token = (await Notifications.getExpoPushTokenAsync()).data;
         console.log(token);
     } else {
-        alert('Must use physical device for Push Notifications');
+        console.log('Must use physical device for Push Notifications');
     }
 
     if (Platform.OS === 'android') {

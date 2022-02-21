@@ -10,14 +10,13 @@ import InformationScreen from './Screens/InformationScreen';
 //firebase
 import firebase from 'firebase/compat/app';
 import apiKeys from './database/key';
-import HomeScreen from './Screens/HomeScreen';
 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
   if (!firebase.apps.length) {
     console.log('Connected with Firebase')
-    firebase.initializeApp(apiKeys.firebaseConfig);
+    firebase.initializeApp(apiKeys.firebaseConfig, { useFeatchStream: false });
   }
   return (
     <NativeBaseProvider>
