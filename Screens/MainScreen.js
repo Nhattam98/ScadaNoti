@@ -51,7 +51,7 @@ export default function MainScreen({ route, navigation }) {
             .doc(email)
             .set(
                 {
-                    email: email,
+                    email: email, 
                     last_login: new Date().toLocaleString(),
                 },
                 { merge: true }
@@ -71,12 +71,12 @@ export default function MainScreen({ route, navigation }) {
         }
     }
 
-    async function storeTokenData(value) {
+    async function storeTokenData(value) { 
         try {
             await AsyncStorage.setItem("@token", value);
         } catch (e) {
             // saving error
-            console.log(e);
+            //console.log(e);
         }
     }
     useEffect(() => {
