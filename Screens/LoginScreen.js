@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { TouchableWithoutFeedback, Keyboard, Platform } from 'react-native';
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import "firebase/compat/firestore";
+import "firebase/compat/auth";
 
 
 export default function LoginScreen({ navigation }) {
@@ -38,10 +38,13 @@ export default function LoginScreen({ navigation }) {
             if (value !== null) {
                 setEmail(value);
                 setisvalidate(true);
-                navigation.navigate("Main", { email: value })
+                //value previously stored
+                navigation.navigate("Main", { email: value})
+            } else {
+
             }
-        } catch (error) {
-            console.log(error);
+        } catch (e) {
+            // error reading value
         }
     }
     function HandleOnLogin(email) {
@@ -67,6 +70,7 @@ export default function LoginScreen({ navigation }) {
         }
     }
     useEffect(async () => {
+        console.log("Vo day");
         const unsubscribe = await navigation.addListener("focus", () => {
             removeValue();
             console.log("remove storage");

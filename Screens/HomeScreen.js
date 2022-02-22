@@ -226,16 +226,15 @@ export default function HomeScreen({ navigation }) {
     const _onRefresh = () => {
         console.log("_onRefresh");
         setRefreshing(true);
-        //loadData();
-        setdata(data_app_store);
+        loadData();
+        //setdata(data_app_store);
         setRefreshing(false);
     };
     useEffect(async () => {
         const unsubscribe = navigation.addListener("focus", () => {
             Notifications.setBadgeCountAsync(0);
-            //loadData();
-            setdata(data_app_store);
-
+            loadData();
+            //setdata(data_app_store);
         });
         return unsubscribe;
     }, [navigation]);
@@ -257,14 +256,7 @@ export default function HomeScreen({ navigation }) {
                 mb={2}
             >
                 <HStack space={3} alignItems="center" justifyContent="space-between">
-                    {/* <Avatar
-                        size="50px"
-                        borderColor="yellow.400"
-                        borderWidth="2"
-                        source={{ uri: item.User_Avatar }}
-                    /> */}
-                    <Avatar.Text size={50} backgroundColor="#3686d1" label={ item.User_Avatar} />
-
+                    <Avatar.Text size={50} backgroundColor="#3686d1" label={item.User_Avatar} />
                     <VStack>
                         <Text
                             fontSize="18"
@@ -275,22 +267,22 @@ export default function HomeScreen({ navigation }) {
                             bold
                         > {item.Plant} ({item.DateTime})
                         </Text>
-                        <Divider/>
+                        <Divider />
                         <VStack space={1}>
-                        <Text
-                            _dark={{
-                                color: "red.50",
-                            }}
+                            <Text
+                                _dark={{
+                                    color: "red.50",
+                                }}
 
-                            color="red.800" bold> - {item.McName}
+                                color="red.800" bold> - {item.McName}
 
-                        </Text>
-                        <Text
-                            _dark={{
-                                color: "red.50",
-                            }}
-                            color="green.700" bold> - {item.OpName}
-                        </Text>
+                            </Text>
+                            <Text
+                                _dark={{
+                                    color: "red.50",
+                                }}
+                                color="green.700" bold> - {item.OpName}
+                            </Text>
                             <Text
                                 color="purple.800"
                                 _dark={{
@@ -324,7 +316,7 @@ export default function HomeScreen({ navigation }) {
                             > - Time: {item.Hms}
                             </Text>
                         </VStack>
-                        </VStack>
+                    </VStack>
                     <Spacer />
                 </HStack>
             </Box>
@@ -345,6 +337,7 @@ export default function HomeScreen({ navigation }) {
                     }
                     data={data}
                     renderItem={_renderItem}
+                    initialNumToRender={7}
                     keyExtractor={(item, index) => index.toString()}
                 />
                 <Loader isLoading={isLoading} />

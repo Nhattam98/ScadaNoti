@@ -14,7 +14,11 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "eject": "expo eject"
+    "eject": "expo eject",
+    "build:production": "expo build:android --release-channel production",
+    "build:staging": "expo build:android --release-channel staging",
+    "publish:production": "expo publish --release-channel production",
+    "publish:staging": "expo publish --release-channel staging"
   },
   "dependencies": {
     "@expo/vector-icons": "^12.0.0",
@@ -24,6 +28,7 @@
     "@react-navigation/native-stack": "^6.5.0",
     "expo": "^44.0.0",
     "expo-constants": "~13.0.1",
+    "expo-device": "^4.1.1",
     "expo-notifications": "~0.14.0",
     "expo-status-bar": "~1.2.0",
     "expo-updates": "~0.11.6",

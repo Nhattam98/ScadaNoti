@@ -1,4 +1,4 @@
-import { NativeBaseProvider } from 'native-base';
+import { NativeBaseProvider} from 'native-base';
 import React, { useState, useRef, useEffect } from 'react';
 import Constants from 'expo-constants';
 import * as Notifications from 'expo-notifications';
@@ -9,6 +9,7 @@ import "firebase/compat/firestore";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import HomeScreen from './HomeScreen';
 import InformationScreen from '../Screens/InformationScreen';
+import * as Updates from 'expo-updates';
 
 Notifications.setNotificationHandler({
     handleNotification: async () => ({
@@ -18,6 +19,7 @@ Notifications.setNotificationHandler({
     }),
 });
 
+
 const Tab = createBottomTabNavigator();
 export default function MainScreen({ route, navigation }) {
     const { email } = route.params;
@@ -26,32 +28,16 @@ export default function MainScreen({ route, navigation }) {
     const [notification, setNotification] = useState(false);
     const notificationListener = useRef();
     const responseListener = useRef();
-    const db  = firebase.firestore();
-    // async function SaveTokenUser(email, token) {
-    //     await db
-    //         .collection("Tokens")
-    //         .doc(email + "|" + token)
-    //         .set(
-    //             {
-    //                 email: email,
-    //                 token: token,
-    //                 last_login: new Date().toLocaleString(),
-    //             },
-    //             { merge: true }
-    //         )
-    //         .then(function () {
-    //             setExpoPushToken(token);
-    //             storeTokenData(token);
-    //             console.log("Cấp token thành công!");
-    //         });
-    // }
+    const db = firebase.firestore();
+
     async function SaveTokenUser(email, token) {
         await db
             .collection("Tokens")
-            .doc(email)
+            .doc(email + "|" + token)
             .set(
                 {
-                    email: email, 
+                    email: email,
+                    token: token,
                     last_login: new Date().toLocaleString(),
                 },
                 { merge: true }
@@ -71,17 +57,16 @@ export default function MainScreen({ route, navigation }) {
         }
     }
 
-    async function storeTokenData(value) { 
+    async function storeTokenData(value) {
         try {
             await AsyncStorage.setItem("@token", value);
         } catch (e) {
             // saving error
-            //console.log(e);
+            console.log(e);
         }
     }
     useEffect(() => {
         registerForPushNotificationsAsync().then(token => SaveTokenUser(email, token));
-
         notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
             setNotification(notification);
         });
@@ -106,7 +91,7 @@ export default function MainScreen({ route, navigation }) {
                         if (route.name === "Home") {
                             iconName = focused ? "home" : "home-outline";
                         } else if (route.name === "Settings") {
-                            iconName = focused ? "information-circle-outline" : "information-circle-outline";
+                            iconName = focused ? "cog" : "cog-outline";
                         }
 
                         return <Ionicons name={iconName} size={size} color={color} />;
@@ -120,7 +105,7 @@ export default function MainScreen({ route, navigation }) {
                     component={HomeScreen}
                     initialParams={{ token: expoPushToken }}
                 />
-                {/* <Tab.Screen name="Settings" options={{ title: "Scada Information", headerShown: false }} component={InformationScreen} /> */}
+                <Tab.Screen name="Settings" options={{ title: "Settings", headerShown: false }} component={InformationScreen} />
             </Tab.Navigator>
         </NativeBaseProvider>
     );
