@@ -9,13 +9,12 @@ import "firebase/compat/firestore";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import HomeScreen from './HomeScreen';
 import InformationScreen from '../Screens/InformationScreen';
-import * as Updates from 'expo-updates';
 
 Notifications.setNotificationHandler({
     handleNotification: async () => ({
         shouldShowAlert: true,
         shouldPlaySound: false,
-        shouldSetBadge: false,
+        shouldSetBadge: true,
     }),
 });
 
