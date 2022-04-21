@@ -255,65 +255,53 @@ export default function HomeScreen({ navigation }) {
                 py="2"
                 mb={2}
             >
-                <HStack space={3} alignItems="center" justifyContent="space-between">
+                <HStack space={3} alignItems="center" justifyContent="space-between" >
                     <Avatar.Text size={50} backgroundColor="#3686d1" label={item.User_Avatar} />
                     <VStack>
                         <Text
-                            fontSize="18"
+                            fontSize={18}
                             _dark={{
                                 color: "warmGray.50",
                             }}
-                            color="coolGray.800"
+                            color="blue.800"
                             bold
-                        > {item.Plant} ({item.DateTime})
+                        > {item.McName}
                         </Text>
-                        <Divider />
-                        <VStack space={1}>
+                        <Divider/>
+                        <VStack>
                             <Text
+                                fontSize={15}
                                 _dark={{
-                                    color: "red.50",
+                                    color: "red.500",
                                 }}
 
-                                color="red.800" bold> - {item.McName}
+                                color="red.500" bold> {item.McCode} [{item.McId}]
 
                             </Text>
                             <Text
+                                fontSize={15}
                                 _dark={{
                                     color: "red.50",
                                 }}
-                                color="green.700" bold> - {item.OpName}
+                                color="green.700" bold> Plant {item.Plant} - {item.OpName}
                             </Text>
                             <Text
+                                fontSize={16}
                                 color="purple.800"
                                 _dark={{
                                     color: "purple.800",
                                 }}
                                 bold
-                            > - PV: {item.PvValue}
+                            > PV: {item.PvValue}, Min: {item.MinValue},  Max: {item.MaxValue}
                             </Text>
                             <Text
-                                color="info.600"
-                                _dark={{
-                                    color: "info.600",
-                                }}
-                                bold
-                            > - Max: {item.MaxValue}
-                            </Text>
-                            <Text
-                                color="teal.400"
-                                _dark={{
-                                    color: "teal.400",
-                                }}
-                                bold
-                            > - Min: {item.MinValue}
-                            </Text>
-                            <Text
+                                fontSize={15}
                                 color="warning.400"
                                 _dark={{
                                     color: "warning.800",
                                 }}
                                 bold
-                            > - Time: {item.Hms}
+                            >       Time: {item.Hms}
                             </Text>
                         </VStack>
                     </VStack>
