@@ -28,7 +28,7 @@
         "foregroundImage": "./assets/icon.png",
         "backgroundColor": "#FFFFFF"
       },
-      "versionCode": 1,
+      "versionCode": 9,
       "package": "com.csgchangshin.ScadaVJ",
       "googleServicesFile": "./google-services.json"
     },

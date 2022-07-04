@@ -9,6 +9,7 @@ import "firebase/compat/firestore";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import HomeScreen from './HomeScreen';
 import InformationScreen from '../Screens/InformationScreen';
+import FireAlarmScreen from './FireAlarmScreen';
 
 Notifications.setNotificationHandler({
     handleNotification: async () => ({
@@ -89,7 +90,12 @@ export default function MainScreen({ route, navigation }) {
 
                         if (route.name === "Home") {
                             iconName = focused ? "home" : "home-outline";
-                        } else if (route.name === "Settings") {
+                        } 
+                        else if (route.name === "FireAlarm") {
+                            iconName = focused ? "md-bonfire" : "md-bonfire-outline";
+                        }
+
+                        else if (route.name === "Settings") {
                             iconName = focused ? "cog" : "cog-outline";
                         }
 
@@ -100,10 +106,11 @@ export default function MainScreen({ route, navigation }) {
                 })}
             >
                 <Tab.Screen name="Home"
-                    options={{ title: "Home", headerShown: false }}
+                    options={{ title: "Scada Alarm", headerShown: false }}
                     component={HomeScreen}
                     initialParams={{ token: expoPushToken }}
                 />
+                <Tab.Screen name="FireAlarm" options={{ title: "Fire Alarm", headerShown: false }} component={FireAlarmScreen} />
                 <Tab.Screen name="Settings" options={{ title: "Settings", headerShown: false }} component={InformationScreen} />
             </Tab.Navigator>
         </NativeBaseProvider>
