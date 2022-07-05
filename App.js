@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { NativeBaseProvider, Box, HStack, Text, StatusBar } from 'native-base';
+import { NativeBaseProvider, extendTheme } from 'native-base';
 //Import Screens
 import LoginScreen from './Screens/LoginScreen';
 import MainScreen from './Screens/MainScreen';
@@ -11,7 +11,6 @@ import firebase from 'firebase/compat/app';
 import apiKeys from './database/key';
 
 const Stack = createNativeStackNavigator();
-
 
 export default function App() {
   if (!firebase.apps.length) {

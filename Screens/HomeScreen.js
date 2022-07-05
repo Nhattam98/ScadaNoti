@@ -11,7 +11,7 @@ import {
     Pressable,
     Icon,
     NativeBaseProvider,
-    StatusBar
+    StatusBar,
 } from "native-base";
 import { RefreshControl } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -32,25 +32,24 @@ export default function HomeScreen({ navigation }) {
 
     const AppBar = () => {
         return (
-            <VStack>
+            <>
                 <StatusBar backgroundColor="transparent" barStyle="dark-content" />
                 <Box safeArea />
                 <HStack px="5" py="3">
                     <Text color="tertiary.600" fontSize="18" fontWeight="bold">Scada Notification Resource</Text>
                 </HStack>
-            </VStack>
+            </>
         );
     }
 
-    const deleteData = async (id) => {
-        try {
-             await firebase.firestore().collection("ScadaCollection").doc(id).delete().then(()=>{
-                loadData();
-             });
-        } catch (error) {
-            console.log(error);
-        }
-    };
+    const deleteData_Test = (doc_id) => {
+        firebase.firestore().collection("ScadaCollection").doc(doc_id).delete().then(function() {
+            console.log("Document successfully deleted!");
+            loadData();
+        }).catch(function(error) {
+            console.error("Error removing document: ", error);
+        });
+    }
 
 
     const loadData = async () => {
@@ -116,7 +115,6 @@ export default function HomeScreen({ navigation }) {
                 pr="5"
                 py="2"
                 mb={2}
-                pb={2}
             >
                 <Pressable onPress={() => console.log('You touched me')} borderBottomColor="trueGray.200" borderBottomWidth={1} justifyContent="center" underlayColor={'#AAA'} _pressed={{
                     bg: 'trueGray.200'
@@ -132,7 +130,7 @@ export default function HomeScreen({ navigation }) {
                                 }}
                                 color="blue.500"
                                 bold
-                            > {item.McName}
+                            > {item.McName} - {item.key}
                             </Text>
                             <Divider />
                             <VStack>
@@ -179,18 +177,20 @@ export default function HomeScreen({ navigation }) {
         ),
         [data]);
 
-        const closeRow = (rowMap, rowKey) => {
-            if (rowMap[rowKey]) {
-              rowMap[rowKey].closeRow();
-            }
-          };
+    const closeRow = (rowMap, rowKey) => {
+        if (rowMap[rowKey]) {
+            rowMap[rowKey].closeRow();
+        }
+    };
 
     const deleteRow = (rowMap, rowKey) => {
         closeRow(rowMap, rowKey);
         const newData = [...data];
         const prevIndex = data.findIndex(item => item.key === rowKey);
         newData.splice(prevIndex, 1);
-        deleteData(rowKey);
+        setdata(newData);
+        // deleteData(rowKey);
+        deleteData_Test(rowKey);
     };
 
     const onRowDidOpen = rowKey => {
@@ -212,11 +212,11 @@ export default function HomeScreen({ navigation }) {
     return (
         <NativeBaseProvider>
             <AppBar />
-            <Center py={1} px={3} backgroundColor="gray.200">
+            <Center py={1} px={3} pb={100} backgroundColor="gray.200">
                 <Box
                     w={{ base: "100%", }}
                     h={{ base: "100%", }}
-                    safeArea
+                // safeArea
                 >
                     <SwipeListView removeClippedSubviews={true}
                         refreshControl={
