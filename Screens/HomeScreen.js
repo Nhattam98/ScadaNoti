@@ -2,7 +2,6 @@ import React, { useEffect, useMemo, useState } from "react";
 import {
     Text,
     Box,
-    FlatList,
     HStack,
     VStack,
     Spacer,
@@ -44,8 +43,8 @@ export default function HomeScreen({ navigation }) {
 
     const deleteData_Test = (doc_id) => {
         firebase.firestore().collection("ScadaCollection").doc(doc_id).delete().then(function() {
-            console.log("Document successfully deleted!");
             loadData();
+            console.log("Document successfully deleted!");
         }).catch(function(error) {
             console.error("Error removing document: ", error);
         });
@@ -62,7 +61,6 @@ export default function HomeScreen({ navigation }) {
                     firebase.auth().currentUser?.email == null
                         ? user_data_json
                         : firebase.auth().currentUser?.email;
-                console.log("User Login: ", user);
                 db.collection("ScadaCollection").where("SHOW_YN", "==", "Y").where("User_Email", "==", user).orderBy("DeptCode", "asc")
                     .onSnapshot((querySnapshot) => {
                         querySnapshot.forEach((documentSnapshot) => {
@@ -86,7 +84,6 @@ export default function HomeScreen({ navigation }) {
         console.log("_onRefresh");
         setRefreshing(true);
         loadData();
-        //setdata(data_app_store);
         setRefreshing(false);
     };
     useEffect(async () => {
@@ -130,7 +127,7 @@ export default function HomeScreen({ navigation }) {
                                 }}
                                 color="blue.500"
                                 bold
-                            > {item.McName} - {item.key}
+                            > {item.McName}
                             </Text>
                             <Divider />
                             <VStack>
@@ -183,13 +180,11 @@ export default function HomeScreen({ navigation }) {
         }
     };
 
-    const deleteRow = (rowMap, rowKey) => {
-        closeRow(rowMap, rowKey);
+    const deleteRow = (rowMap, rowKey, index) => {
+        closeRow(rowMap, index);
         const newData = [...data];
         const prevIndex = data.findIndex(item => item.key === rowKey);
         newData.splice(prevIndex, 1);
-        setdata(newData);
-        // deleteData(rowKey);
         deleteData_Test(rowKey);
     };
 
@@ -197,12 +192,12 @@ export default function HomeScreen({ navigation }) {
         console.log('This row opened is: ', rowKey);
     };
     const renderHiddenItem = (data, rowMap) => <HStack flex={0.94}>
-        <Pressable px={4} ml="auto" bg="dark.500" justifyContent="center" onPress={() => closeRow(rowMap, data.item.key)} _pressed={{
+        <Pressable px={4} ml="auto" bg="dark.500" borderRadius={9} justifyContent="center" onPress={() => closeRow(rowMap, data.index)} _pressed={{
             opacity: 0.5
         }}>
             <Icon as={<Ionicons name="close" />} color="white" />
         </Pressable>
-        <Pressable px={4} bg="red.500" justifyContent="center" onPress={() => deleteRow(rowMap, data.item.key)} _pressed={{
+        <Pressable px={4} bg="red.500" borderRadius={9} justifyContent="center" onPress={() => deleteRow(rowMap, data.item.key, data.index)} _pressed={{
             opacity: 0.5
         }}>
             <Icon as={<MaterialIcons name="delete" />} color="white" />

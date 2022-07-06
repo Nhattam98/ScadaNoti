@@ -48,7 +48,6 @@ export default function LoginScreen({ navigation }) {
         }
     }
     function HandleOnLogin(email) {
-        console.log("Log in Clicked!!!");
         try {
             if (isValid) {
                 navigation.navigate("Main", { email: email });
@@ -70,10 +69,8 @@ export default function LoginScreen({ navigation }) {
         }
     }
     useEffect(async () => {
-        console.log("Vo day");
         const unsubscribe = await navigation.addListener("focus", () => {
             removeValue();
-            console.log("remove storage");
         });
         getData();
         return unsubscribe;

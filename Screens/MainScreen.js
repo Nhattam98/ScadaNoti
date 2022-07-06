@@ -1,8 +1,8 @@
-import { NativeBaseProvider} from 'native-base';
+import { NativeBaseProvider } from 'native-base';
 import React, { useState, useRef, useEffect } from 'react';
 import Constants from 'expo-constants';
 import * as Notifications from 'expo-notifications';
-import { Ionicons } from '@expo/vector-icons';
+import { MaterialIcons } from '@expo/vector-icons';
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import firebase from "firebase/compat/app";
 import "firebase/compat/firestore";
@@ -23,7 +23,6 @@ Notifications.setNotificationHandler({
 const Tab = createBottomTabNavigator();
 export default function MainScreen({ route, navigation }) {
     const { email } = route.params;
-    console.log(route.params);
     const [expoPushToken, setExpoPushToken] = useState('');
     const [notification, setNotification] = useState(false);
     const notificationListener = useRef();
@@ -69,11 +68,16 @@ export default function MainScreen({ route, navigation }) {
         registerForPushNotificationsAsync().then(token => SaveTokenUser(email, token));
         notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
             setNotification(notification);
+            if (notification.request.content.title.includes("Fire Alarm")) {
+                navigation.navigate("FireAlarm");
+            }
+            if (notification.request.content.title.includes("Scada")) {
+                navigation.navigate("Home");
+            }
         });
         responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
             console.log(response);
         });
-        console.log(email);
         storeData(email); //Luu tru email lai cho lan sau khoi dang nhap
         return () => {
             Notifications.removeNotificationSubscription(notificationListener.current);
@@ -84,22 +88,23 @@ export default function MainScreen({ route, navigation }) {
     return (
         <NativeBaseProvider>
             <Tab.Navigator
+                initialRouteName='Home'
                 screenOptions={({ route }) => ({
                     tabBarIcon: ({ focused, color, size }) => {
                         let iconName;
 
                         if (route.name === "Home") {
-                            iconName = focused ? "home" : "home-outline";
-                        } 
+                            iconName = focused ? "timer" : "timer";
+                        }
                         else if (route.name === "FireAlarm") {
-                            iconName = focused ? "md-bonfire" : "md-bonfire-outline";
+                            iconName = focused ? "local-fire-department" : "local-fire-department";
                         }
 
                         else if (route.name === "Settings") {
-                            iconName = focused ? "cog" : "cog-outline";
+                            iconName = focused ? "settings" : "settings";
                         }
 
-                        return <Ionicons name={iconName} size={size} color={color} />;
+                        return <MaterialIcons name={iconName} size={size} color={color} />;
                     },
                     tabBarActiveTintColor: "tomato",
                     tabBarInactiveTintColor: "gray",
@@ -109,6 +114,7 @@ export default function MainScreen({ route, navigation }) {
                     options={{ title: "Scada Alarm", headerShown: false }}
                     component={HomeScreen}
                     initialParams={{ token: expoPushToken }}
+                    
                 />
                 <Tab.Screen name="FireAlarm" options={{ title: "Fire Alarm", headerShown: false }} component={FireAlarmScreen} />
                 <Tab.Screen name="Settings" options={{ title: "Settings", headerShown: false }} component={InformationScreen} />

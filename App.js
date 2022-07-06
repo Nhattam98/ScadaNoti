@@ -6,6 +6,7 @@ import { NativeBaseProvider, extendTheme } from 'native-base';
 import LoginScreen from './Screens/LoginScreen';
 import MainScreen from './Screens/MainScreen';
 import LoadingScreen from './Screens/LoadingScreen';
+import FireAlarmScreen from './Screens/FireAlarmScreen';
 //firebase
 import firebase from 'firebase/compat/app';
 import apiKeys from './database/key';
@@ -22,7 +23,7 @@ export default function App() {
       <NavigationContainer>
         <Stack.Navigator>
           <Stack.Screen name="Loading" component={LoadingScreen} options={{headerShown: false}}/>
-          <Stack.Screen name="Login" component={LoginScreen} options={{headerShown: false}} />
+          <Stack.Screen name="Login" component={LoginScreen} options={{headerShown: false}} /> 
           <Stack.Screen name="Main" component={MainScreen} options={{headerShown: false}} />
         </Stack.Navigator>
       </NavigationContainer>
