@@ -22,7 +22,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import firebase from "firebase/compat/app";
 import * as Updates from 'expo-updates';
 import * as Device from 'expo-device';
-import { paddingTop } from "styled-system";
 
 const InformationScreen = ({ navigation }) => {
     const [user, setuser] = useState("");
@@ -143,7 +142,7 @@ const InformationScreen = ({ navigation }) => {
                     flex: 1
                 }}>
                 <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                    <ScrollView  paddingTop={60}>
+                    <ScrollView  paddingTop={10}>
                         <VStack>
                             <Center py="2">
                                 <Box

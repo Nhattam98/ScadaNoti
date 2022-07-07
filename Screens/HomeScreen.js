@@ -11,6 +11,7 @@ import {
     Icon,
     NativeBaseProvider,
     StatusBar,
+    View
 } from "native-base";
 import { RefreshControl } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -42,10 +43,10 @@ export default function HomeScreen({ navigation }) {
     }
 
     const deleteData_Test = (doc_id) => {
-        firebase.firestore().collection("ScadaCollection").doc(doc_id).delete().then(function() {
+        firebase.firestore().collection("ScadaCollection").doc(doc_id).delete().then(function () {
             loadData();
             console.log("Document successfully deleted!");
-        }).catch(function(error) {
+        }).catch(function (error) {
             console.error("Error removing document: ", error);
         });
     }
@@ -81,98 +82,110 @@ export default function HomeScreen({ navigation }) {
         setisLoading(false);
     }
     const _onRefresh = () => {
-        console.log("_onRefresh");
         setRefreshing(true);
         loadData();
         setRefreshing(false);
     };
     useEffect(async () => {
-        const unsubscribe = navigation.addListener("focus", () => {
-            Notifications.setBadgeCountAsync(0);
-            loadData();
-        });
-        return unsubscribe;
+        setisLoading(true);
+        try {
+            const unsubscribe = await navigation.addListener("focus", () => {
+                Notifications.setBadgeCountAsync(0);
+                loadData();
+            });
+            return unsubscribe;
+        } catch (error) {
+            Toast(error);
+        } finally {
+            setisLoading(false); // set loading to false
+        }
     }, [navigation]);
+    class RenderItem extends React.PureComponent {
+        render() {
+            return (
+                <Box
+                    borderRadius={9}
+                    borderBottomWidth={1}
+                    borderLeftWidth={1}
+                    borderRightWidth={1}
+                    _dark={{
+                        borderColor: "gray.600",
+                    }}
+                    backgroundColor="white"
+                    borderColor="coolGray.200"
+                    pl="5"
+                    pr="5"
+                    py="2"
+                    mb={2}
+                >
+                    <Pressable onPress={() => console.log('You touched me')} borderBottomColor="trueGray.200" borderBottomWidth={1} justifyContent="center" underlayColor={'#AAA'} _pressed={{
+                        bg: 'trueGray.200'
+                    }}>
 
+                        <HStack space={2} alignItems="center" justifyContent="space-between" >
+                            <Avatar.Text size={50} backgroundColor="#3686d1" label={this.props.item.User_Avatar} />
+                            <VStack>
+                                <Text
+                                    fontSize={18}
+                                    _dark={{
+                                        color: "blue.500",
+                                    }}
+                                    color="blue.500"
+                                    bold
+                                > {this.props.item.McName}
+                                </Text>
+                                <Divider />
+                                <VStack>
+                                    <Text
+                                        fontSize={15}
+                                        _dark={{
+                                            color: "red.500",
+                                        }}
+
+                                        color="red.500" bold> - {this.props.item.McCode} [{this.props.item.McId}]
+
+                                    </Text>
+                                    <Text
+                                        fontSize={15}
+                                        _dark={{
+                                            color: "green.600",
+                                        }}
+                                        color="green.600" bold> - Plant {this.props.item.Plant} - {this.props.item.OpName}
+                                    </Text>
+                                    <Text
+                                        fontSize={16}
+                                        color="purple.500"
+                                        _dark={{
+                                            color: "purple.500",
+                                        }}
+                                        bold
+                                    > - PV: {this.props.item.PvValue}, Min: {this.props.item.MinValue},  Max: {this.props.item.MaxValue}
+                                    </Text>
+                                    <Text
+                                        fontSize={15}
+                                        color="warning.400"
+                                        _dark={{
+                                            color: "warning.800",
+                                        }}
+                                        bold
+                                    >- Time: {this.props.item.Hms}
+                                    </Text>
+                                </VStack>
+                            </VStack>
+                            <Spacer />
+                        </HStack>
+                    </Pressable>
+                </Box>
+            )
+        }
+    }
 
     const _renderItem = useMemo(() =>
 
         ({ item }) => (
-            <Box
-                borderRadius={9}
-                borderBottomWidth={1}
-                borderLeftWidth={1}
-                borderRightWidth={1}
-                _dark={{
-                    borderColor: "gray.600",
-                }}
-                backgroundColor="white"
-                borderColor="coolGray.200"
-                pl="5"
-                pr="5"
-                py="2"
-                mb={2}
-            >
-                <Pressable onPress={() => console.log('You touched me')} borderBottomColor="trueGray.200" borderBottomWidth={1} justifyContent="center" underlayColor={'#AAA'} _pressed={{
-                    bg: 'trueGray.200'
-                }}>
-
-                    <HStack space={3} alignItems="center" justifyContent="space-between" >
-                        <Avatar.Text size={50} backgroundColor="#3686d1" label={item.User_Avatar} />
-                        <VStack>
-                            <Text
-                                fontSize={18}
-                                _dark={{
-                                    color: "blue.500",
-                                }}
-                                color="blue.500"
-                                bold
-                            > {item.McName}
-                            </Text>
-                            <Divider />
-                            <VStack>
-                                <Text
-                                    fontSize={15}
-                                    _dark={{
-                                        color: "red.500",
-                                    }}
-
-                                    color="red.500" bold> - {item.McCode} [{item.McId}]
-
-                                </Text>
-                                <Text
-                                    fontSize={15}
-                                    _dark={{
-                                        color: "green.600",
-                                    }}
-                                    color="green.600" bold> - Plant {item.Plant} - {item.OpName}
-                                </Text>
-                                <Text
-                                    fontSize={16}
-                                    color="purple.500"
-                                    _dark={{
-                                        color: "purple.500",
-                                    }}
-                                    bold
-                                > - PV: {item.PvValue}, Min: {item.MinValue},  Max: {item.MaxValue}
-                                </Text>
-                                <Text
-                                    fontSize={15}
-                                    color="warning.400"
-                                    _dark={{
-                                        color: "warning.800",
-                                    }}
-                                    bold
-                                >- Time: {item.Hms}
-                                </Text>
-                            </VStack>
-                        </VStack>
-                        <Spacer />
-                    </HStack>
-                </Pressable>
-            </Box>
-        ),
-        [data]);
+            <RenderItem item={item} />
+        ), [data]
+    );
 
     const closeRow = (rowMap, rowKey) => {
         if (rowMap[rowKey]) {

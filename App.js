@@ -1,12 +1,11 @@
 import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { NativeBaseProvider, extendTheme } from 'native-base';
+import { NativeBaseProvider} from 'native-base';
 //Import Screens
 import LoginScreen from './Screens/LoginScreen';
 import MainScreen from './Screens/MainScreen';
 import LoadingScreen from './Screens/LoadingScreen';
-import FireAlarmScreen from './Screens/FireAlarmScreen';
 //firebase
 import firebase from 'firebase/compat/app';
 import apiKeys from './database/key';
