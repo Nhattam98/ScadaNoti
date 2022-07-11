@@ -24,6 +24,8 @@ import * as Notifications from "expo-notifications";
 import { Avatar } from "react-native-paper";
 import { SwipeListView } from "react-native-swipe-list-view";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
+import  getDataFireAlarm from '../components/api/api';
+import moment from "moment";
 
 
 export default function HomeScreen({ navigation }) {
@@ -42,6 +44,28 @@ export default function HomeScreen({ navigation }) {
       </>
     );
   }
+
+  async function fetchFireAlarmData() {
+    setisLoading(true);
+    var V_P_SEND = "";
+    var time = moment(new Date()).format("HHmmss");
+    console.log(moment(new Date()).format("HHmmss"));
+    if (time <= '120000') {
+      V_P_SEND = 'Send1';
+    }
+    if (time >= '130000' && time <= '163000') {
+      V_P_SEND = 'Send2';
+    }
+    console.log(V_P_SEND);
+   return await getDataFireAlarm(V_P_SEND).then((response) => {
+    console.log(response);
+      setdata(response)
+      setisLoading(false);
+    }).catch((error) => {
+      setisLoading(false);
+      console.log("Không tìm thấy dữ liệu: " + error);
+    });
+  }
   const deleteData_Test = (doc_id) => {
     firebase.firestore().collection("FireAlarmCollection").doc(doc_id).delete().then(function () {
       loadData();
@@ -49,35 +73,35 @@ export default function HomeScreen({ navigation }) {
       console.error("Error removing document: ", error);
     });
   }
-  const loadData = async () => {
-    const db = firebase.firestore();
-    setisLoading(true);
-    try {
-      AsyncStorage.getItem('@email').then((user_data_json) => {
-        const data = [];
-        let user =
-          firebase.auth().currentUser?.email == null
-            ? user_data_json
-            : firebase.auth().currentUser?.email;
-        db.collection("FireAlarmCollection").where("SHOW_YN", "==", "Y").where("User_Email", "==", user).orderBy("DeptCode", "asc")
-          .onSnapshot((querySnapshot) => {
-            querySnapshot.forEach((documentSnapshot) => {
-              data.push({
-                ...documentSnapshot.data(),
-                key: documentSnapshot.id,
-              });
+  // const loadData = async () => {
+  //   const db = firebase.firestore();
+  //   try {
+  //     setisLoading(true);
+  //     AsyncStorage.getItem('@email').then((user_data_json) => {
+  //       const data = [];
+  //       let user =
+  //         firebase.auth().currentUser?.email == null
+  //           ? user_data_json
+  //           : firebase.auth().currentUser?.email;
+  //       db.collection("FireAlarmCollection").where("SHOW_YN", "==", "Y").where("User_Email", "==", user).orderBy("DeptCode", "asc")
+  //         .onSnapshot((querySnapshot) => {
+  //           querySnapshot.forEach((documentSnapshot) => {
+  //             data.push({
+  //               ...documentSnapshot.data(),
+  //               key: documentSnapshot.id,
+  //             });
 
-            });
-            setdata(data);
-          });
-        // Unsubscribe from events when no longer in use
-        return () => {
-          setdata([]);
-        };
-      });
-    } catch { }
-    setisLoading(false);
-  }
+  //           });
+  //           setdata(data);
+  //         });
+  //       // Unsubscribe from events when no longer in use
+  //       return () => {
+  //         setdata([]);
+  //       };
+  //     });
+  //   } catch { }
+  //   setisLoading(false);
+  // }
   const _onRefresh = () => {
     setRefreshing(true);
     loadData();
@@ -86,11 +110,7 @@ export default function HomeScreen({ navigation }) {
   useEffect(async () => {
     setisLoading(true);
     try {
-      const unsubscribe = await navigation.addListener("focus", () => {
-        Notifications.setBadgeCountAsync(0);
-        loadData();
-      });
-      return unsubscribe;
+      fetchFireAlarmData();
     } catch (error) {
       Toast(error);
     } finally {
