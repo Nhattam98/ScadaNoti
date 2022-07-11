@@ -12,5 +12,5 @@ export default async function getDataFireAlarm(V_P_SEND) {
         }),
       })
         .then((response) => response.json())
-        .then((json) => {json});
+        .then((json) => {return json});
 }

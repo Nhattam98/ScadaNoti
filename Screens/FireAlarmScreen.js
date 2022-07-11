@@ -47,18 +47,15 @@ export default function HomeScreen({ navigation }) {
 
   async function fetchFireAlarmData() {
     setisLoading(true);
-    var V_P_SEND = "";
+    var V_P_SEND = "Send2";
     var time = moment(new Date()).format("HHmmss");
-    console.log(moment(new Date()).format("HHmmss"));
     if (time <= '120000') {
       V_P_SEND = 'Send1';
     }
     if (time >= '130000' && time <= '163000') {
       V_P_SEND = 'Send2';
     }
-    console.log(V_P_SEND);
-   return await getDataFireAlarm(V_P_SEND).then((response) => {
-    console.log(response);
+   await getDataFireAlarm(V_P_SEND).then((response) => {
       setdata(response)
       setisLoading(false);
     }).catch((error) => {
@@ -73,38 +70,9 @@ export default function HomeScreen({ navigation }) {
       console.error("Error removing document: ", error);
     });
   }
-  // const loadData = async () => {
-  //   const db = firebase.firestore();
-  //   try {
-  //     setisLoading(true);
-  //     AsyncStorage.getItem('@email').then((user_data_json) => {
-  //       const data = [];
-  //       let user =
-  //         firebase.auth().currentUser?.email == null
-  //           ? user_data_json
-  //           : firebase.auth().currentUser?.email;
-  //       db.collection("FireAlarmCollection").where("SHOW_YN", "==", "Y").where("User_Email", "==", user).orderBy("DeptCode", "asc")
-  //         .onSnapshot((querySnapshot) => {
-  //           querySnapshot.forEach((documentSnapshot) => {
-  //             data.push({
-  //               ...documentSnapshot.data(),
-  //               key: documentSnapshot.id,
-  //             });
-
-  //           });
-  //           setdata(data);
-  //         });
-  //       // Unsubscribe from events when no longer in use
-  //       return () => {
-  //         setdata([]);
-  //       };
-  //     });
-  //   } catch { }
-  //   setisLoading(false);
-  // }
   const _onRefresh = () => {
     setRefreshing(true);
-    loadData();
+    fetchFireAlarmData();
     setRefreshing(false);
   };
   useEffect(async () => {
@@ -141,7 +109,7 @@ export default function HomeScreen({ navigation }) {
           }}>
 
             <HStack space={2} alignItems="center" justifyContent="space-between" >
-              <Avatar.Text size={50} backgroundColor="#F984AB" label={this.props.item.User_Avatar} />
+              <Avatar.Text size={50} backgroundColor="#F984AB" label={this.props.item.LINE_NM} />
               <VStack>
                 <Text
                   fontSize={18}
@@ -150,7 +118,7 @@ export default function HomeScreen({ navigation }) {
                   }}
                   color="blue.500"
                   bold
-                > {this.props.item.McName}
+                > {this.props.item.MC_NM}
                 </Text>
                 <Divider />
                 <VStack>
@@ -160,7 +128,7 @@ export default function HomeScreen({ navigation }) {
                       color: "red.500",
                     }}
 
-                    color="red.500" bold> - {this.props.item.McCode} [{this.props.item.McId}]
+                    color="red.500" bold> - {this.props.item.MC_CD} [{this.props.item.MC_ID}]
 
                   </Text>
                   <Text
@@ -168,7 +136,7 @@ export default function HomeScreen({ navigation }) {
                     _dark={{
                       color: "green.600",
                     }}
-                    color="green.600" bold> - Plant {this.props.item.Plant} - {this.props.item.OpName}
+                    color="green.600" bold> - Plant {this.props.item.PLANT} - {this.props.item.OP_NM}
                   </Text>
                   <Text
                     fontSize={16}
@@ -177,7 +145,7 @@ export default function HomeScreen({ navigation }) {
                       color: "purple.500",
                     }}
                     bold
-                  > - PV: {this.props.item.PvValue}, Min: {this.props.item.MinValue},  Max: {this.props.item.MaxValue}
+                  > - PV: {this.props.item.PV_VALUE}, Min: {this.props.item.MIN_VALUE},  Max: {this.props.item.MAX_VALUE}
                   </Text>
                   <Text
                     fontSize={15}
@@ -186,7 +154,7 @@ export default function HomeScreen({ navigation }) {
                       color: "warning.800",
                     }}
                     bold
-                  >- Time: {this.props.item.Hms}
+                  >- Time: {this.props.item.HMS}
                   </Text>
                 </VStack>
               </VStack>
@@ -201,8 +169,7 @@ export default function HomeScreen({ navigation }) {
 
     ({ item }) => (
       <RenderItem item={item} />
-    ),
-    [data]);
+    ), [data]);
 
   const closeRow = (rowMap, rowKey) => {
     if (rowMap[rowKey]) {
@@ -210,12 +177,12 @@ export default function HomeScreen({ navigation }) {
     }
   };
 
-  const deleteRow = (rowMap, rowKey, index) => {
-    closeRow(rowMap, index);
+  const deleteRow = (rowMap, rowKey) => {
+    closeRow(rowMap, rowKey);
     const newData = [...data];
-    const prevIndex = data.findIndex(item => item.key === rowKey);
-    newData.splice(prevIndex, 1);
-    deleteData_Test(rowKey);
+    const prevIndex = data.findIndex(item => item.ORD === rowKey);
+    //newData.splice(prevIndex, 1);
+    //deleteData_Test(rowKey);
   };
 
   const onRowDidOpen = rowKey => {
@@ -227,7 +194,7 @@ export default function HomeScreen({ navigation }) {
     }}>
       <Icon as={<Ionicons name="close" />} color="white" />
     </Pressable>
-    <Pressable px={4} bg="red.500" borderRadius={9} justifyContent="center" onPress={() => deleteRow(rowMap, data.item.key, data.index)} _pressed={{
+    <Pressable px={4} bg="red.500" borderRadius={9} justifyContent="center" onPress={() => deleteRow(rowMap, data.index)} _pressed={{
       opacity: 0.5
     }}>
       <Icon as={<MaterialIcons name="delete" />} color="white" />
