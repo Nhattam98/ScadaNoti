@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState, useRef } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   Text,
   Box,
@@ -12,7 +12,6 @@ import {
   NativeBaseProvider,
   StatusBar,
   Toast,
-  View,
 } from "native-base";
 import { RefreshControl, SafeAreaView } from "react-native";
 import "firebase/compat/firestore";
@@ -27,7 +26,7 @@ import { DeleteFireAlarm } from "../components/api/api";
 import moment from "moment";
 
 
-export default function HomeScreen({ navigation }) {
+export default function HomeScreen({ route, navigation }) {
   const [data, setdata] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
   const [isLoading, setisLoading] = useState(false);
@@ -47,7 +46,7 @@ export default function HomeScreen({ navigation }) {
     const email = await AsyncStorage.getItem('@email');
     const token = await AsyncStorage.getItem('@token');
     setisLoading(true);
-    var V_P_SEND = "Send2";
+    var V_P_SEND = "";
     var time = moment(new Date()).format("HHmmss");
     if (time <= '120000') {
       V_P_SEND = 'Send1';
@@ -91,7 +90,7 @@ export default function HomeScreen({ navigation }) {
     } finally {
       setisLoading(false); // set loading to false
     }
-  }, []);
+  }, [navigation]);
 
   class RenderItem extends React.PureComponent {
     render() {

@@ -100,8 +100,8 @@ export default function MainScreen({ route, navigation }) {
                             iconName = focused ? "local-fire-department" : "local-fire-department";
                         }
 
-                        else if (route.name === "Settings") {
-                            iconName = focused ? "settings" : "settings";
+                        else if (route.name === "Profile") {
+                            iconName = focused ? "person" : "person-outline";
                         }
 
                         return <MaterialIcons name={iconName} size={size} color={color} />;
@@ -110,14 +110,9 @@ export default function MainScreen({ route, navigation }) {
                     tabBarInactiveTintColor: "gray",
                 })}
             >
-                <Tab.Screen name="Home"
-                    options={{ title: "Scada Alarm", headerShown: false }}
-                    component={HomeScreen}
-                    initialParams={{ token: expoPushToken }}
-                    
-                />
-                <Tab.Screen name="FireAlarm" options={{ title: "Fire Alarm", headerShown: false }} component={FireAlarmScreen} />
-                <Tab.Screen name="Settings" options={{ title: "Settings", headerShown: false }} component={InformationScreen} />
+                <Tab.Screen name="Home" options={{ title: "Scada Alarm", headerShown: false}} component={HomeScreen} initialParams={{ token: expoPushToken }} />
+                <Tab.Screen name="FireAlarm"  options={{title: "Fire Alarm", headerShown: false}}  component={FireAlarmScreen} />
+                <Tab.Screen name="Profile" options={{ title: "Profile", headerShown: false }} component={InformationScreen} />
             </Tab.Navigator>
         </NativeBaseProvider>
     );

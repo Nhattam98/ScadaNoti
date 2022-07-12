@@ -19,7 +19,6 @@ import firebase from "firebase/compat/app";
 import "firebase/compat/firestore";
 import "firebase/compat/auth";
 import Loader from './Reload';
-import * as Notifications from "expo-notifications";
 import { Avatar } from "react-native-paper";
 import { SwipeListView } from "react-native-swipe-list-view";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
@@ -74,13 +73,15 @@ export default function HomeScreen({ navigation }) {
 
                         });
                         setdata(data);
+                        setisLoading(false);
                     });
                 // Unsubscribe from events when no longer in use
                 return () => {
                     setdata([]);
+                    setisLoading(false);
                 };
             });
-        } catch {setisLoading(false); } finally {setisLoading(false); }
+        } catch {setisLoading(false); } 
     }
     const _onRefresh = () => {
         loadData();
@@ -89,9 +90,7 @@ export default function HomeScreen({ navigation }) {
         setisLoading(true);
         try {
             const unsubscribe = navigation.addListener("focus", () => {
-                Notifications.setBadgeCountAsync(0);
                 loadData();
-                setisLoading(false);
             });
             return unsubscribe;
         } catch (error) {

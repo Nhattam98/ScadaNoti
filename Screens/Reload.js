@@ -1,3 +1,4 @@
+import { Text, VStack } from 'native-base';
 import React, { Component } from 'react';
 import { StyleSheet, View, Modal, ActivityIndicator } from 'react-native';
 
@@ -25,7 +26,10 @@ class Loader extends Component {
                 onRequestClose={() => { }}>
                 <View style={styles.modalBackground}>
                     <View style={styles.activityIndicatorWrapper}>
-                        <ActivityIndicator animating={this.state.isLoading} color="black" />
+                        <VStack>
+                            <ActivityIndicator size="large" animating={this.state.isLoading} color="black" />
+                            <Text bold color="black">Đang tải</Text>
+                        </VStack>
                     </View>
                 </View>
             </Modal>
@@ -53,4 +57,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default Loader
+export default Loader;
