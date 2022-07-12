@@ -43,18 +43,20 @@ export default function HomeScreen({ navigation }) {
     }
 
     const deleteData_Test = (doc_id) => {
+        setisLoading(true);
         firebase.firestore().collection("ScadaCollection").doc(doc_id).delete().then(function () {
             loadData();
-            console.log("Document successfully deleted!");
+            setisLoading(false);
         }).catch(function (error) {
             console.error("Error removing document: ", error);
+            setisLoading(false);
         });
     }
 
 
     const loadData = async () => {
-        const db = firebase.firestore();
         setisLoading(true);
+        const db = firebase.firestore();
         try {
             AsyncStorage.getItem('@email').then((user_data_json) => {
                 const data = [];
@@ -78,20 +80,18 @@ export default function HomeScreen({ navigation }) {
                     setdata([]);
                 };
             });
-        } catch { }
-        setisLoading(false);
+        } catch {setisLoading(false); } finally {setisLoading(false); }
     }
     const _onRefresh = () => {
-        setRefreshing(true);
         loadData();
-        setRefreshing(false);
     };
-    useEffect(async () => {
+    useEffect(() => {
         setisLoading(true);
         try {
-            const unsubscribe = await navigation.addListener("focus", () => {
+            const unsubscribe = navigation.addListener("focus", () => {
                 Notifications.setBadgeCountAsync(0);
                 loadData();
+                setisLoading(false);
             });
             return unsubscribe;
         } catch (error) {
