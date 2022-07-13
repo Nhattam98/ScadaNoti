@@ -14,7 +14,7 @@ export default async function getDataFireAlarm(V_P_SEND, V_P_EMAIL, V_P_TOKEN) {
         }),
       })
         .then((response) => response.json())
-        .then((json) => {return json});
+        .then((json) => {return Object.values(json)});
 }
 export async function DeleteFireAlarm(V_P_EMAIL, V_P_ORD) {
   // declare the async data fetching function
@@ -30,7 +30,7 @@ export async function DeleteFireAlarm(V_P_EMAIL, V_P_ORD) {
     }),
   })
     .then((response) => response.json())
-    .then((json) => {return (json)})
+    .then((json) => {return Object.values(json)})
     .catch((error) => {
       console.error(error);
     });

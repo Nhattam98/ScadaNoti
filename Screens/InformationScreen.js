@@ -142,7 +142,7 @@ const InformationScreen = ({ navigation }) => {
                     flex: 1
                 }}>
                 <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                    <ScrollView  paddingTop={10}>
+                    <ScrollView  paddingTop={5}>
                         <VStack>
                             <Center py="2">
                                 <Box

@@ -28,6 +28,7 @@ export default function HomeScreen({ navigation }) {
     const [data, setdata] = useState([]);
     const [refreshing, setRefreshing] = useState(false);
     const [isLoading, setisLoading] = useState(false);
+    
 
     const AppBar = () => {
         return (
@@ -81,7 +82,7 @@ export default function HomeScreen({ navigation }) {
                     setisLoading(false);
                 };
             });
-        } catch {setisLoading(false); } 
+        } catch {setisLoading(false); }
     }
     const _onRefresh = () => {
         loadData();

@@ -10,6 +10,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import HomeScreen from './HomeScreen';
 import InformationScreen from '../Screens/InformationScreen';
 import FireAlarmScreen from './FireAlarmScreen';
+import { Platform } from 'react-native';
 
 Notifications.setNotificationHandler({
     handleNotification: async () => ({
@@ -69,7 +70,7 @@ export default function MainScreen({ route, navigation }) {
         notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
             setNotification(notification);
             if (notification.request.content.title.includes("Fire Alarm")) {
-                navigation.navigate("FireAlarm");
+                navigation.navigate("FireAlarm"); 
             }
             if (notification.request.content.title.includes("Scada")) {
                 navigation.navigate("Home");
@@ -111,7 +112,7 @@ export default function MainScreen({ route, navigation }) {
                 })}
             >
                 <Tab.Screen name="Home" options={{ title: "Scada Alarm", headerShown: false}} component={HomeScreen} initialParams={{ token: expoPushToken }} />
-                <Tab.Screen name="FireAlarm"  options={{title: "Fire Alarm", headerShown: false}}  component={FireAlarmScreen} />
+                <Tab.Screen name="FireAlarm" options={{ title: "Fire Alarm",  headerShown: false  }}   component={FireAlarmScreen} />
                 <Tab.Screen name="Profile" options={{ title: "Profile", headerShown: false }} component={InformationScreen} />
             </Tab.Navigator>
         </NativeBaseProvider>
@@ -138,7 +139,7 @@ async function registerForPushNotificationsAsync() {
 
     if (Platform.OS === 'android') {
         Notifications.setNotificationChannelAsync('default', {
-            name: 'default',
+            name: 'default',    
             importance: Notifications.AndroidImportance.MAX,
             vibrationPattern: [0, 250, 250, 250],
             lightColor: '#FF231F7C',
