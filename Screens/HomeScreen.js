@@ -22,6 +22,8 @@ import Loader from './Reload';
 import { Avatar } from "react-native-paper";
 import { SwipeListView } from "react-native-swipe-list-view";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
+import moment from "moment";
+import { DeleteScadaAlarm, getDataScadaAlarm } from "../components/api/api";
 
 
 export default function HomeScreen({ navigation }) {
@@ -42,56 +44,89 @@ export default function HomeScreen({ navigation }) {
         );
     }
 
-    const deleteData_Test = (doc_id) => {
+    // const deleteData_Test = (doc_id) => {
+    //     setisLoading(true);
+    //     firebase.firestore().collection("ScadaCollection").doc(doc_id).delete().then(function () {
+    //         loadData();
+    //         setisLoading(false);
+    //     }).catch(function (error) {
+    //         console.error("Error removing document: ", error);
+    //         setisLoading(false);
+    //     });
+    // }
+
+
+    // const loadData = async () => {
+    //     setisLoading(true);
+    //     const db = firebase.firestore();
+    //     try {
+    //         AsyncStorage.getItem('@email').then((user_data_json) => {
+    //             const data = [];
+    //             let user =
+    //                 firebase.auth().currentUser?.email == null
+    //                     ? user_data_json
+    //                     : firebase.auth().currentUser?.email;
+    //             db.collection("ScadaCollection").where("SHOW_YN", "==", "Y").where("User_Email", "==", user).orderBy("DeptCode", "asc")
+    //                 .onSnapshot((querySnapshot) => {
+    //                     querySnapshot.forEach((documentSnapshot) => {
+    //                         data.push({
+    //                             ...documentSnapshot.data(),
+    //                             key: documentSnapshot.id,
+    //                         });
+
+    //                     });
+    //                     setdata(data);
+    //                     setisLoading(false);
+    //                 });
+    //             // Unsubscribe from events when no longer in use
+    //             return () => {
+    //                 setdata([]);
+    //                 setisLoading(false);
+    //             };
+    //         });
+    //     } catch {setisLoading(false); }
+    // }
+    async function deleteData(V_P_EMAIL, V_P_ORD) {
         setisLoading(true);
-        firebase.firestore().collection("ScadaCollection").doc(doc_id).delete().then(function () {
-            loadData();
-            setisLoading(false);
-        }).catch(function (error) {
-            console.error("Error removing document: ", error);
-            setisLoading(false);
+        return await DeleteScadaAlarm(V_P_EMAIL, V_P_ORD).then((response) => {
+          setdata(response);
+          fetchScadaAlarmData();
+          setisLoading(false);
+        }).catch((error) => {
+          setisLoading(false);
+          console.log("Không tìm thấy dữ liệu: " + error);
         });
-    }
-
-
-    const loadData = async () => {
+      }
+    async function fetchScadaAlarmData() {
+        const email = await AsyncStorage.getItem('@email');
+        const token = await AsyncStorage.getItem('@token');
         setisLoading(true);
-        const db = firebase.firestore();
-        try {
-            AsyncStorage.getItem('@email').then((user_data_json) => {
-                const data = [];
-                let user =
-                    firebase.auth().currentUser?.email == null
-                        ? user_data_json
-                        : firebase.auth().currentUser?.email;
-                db.collection("ScadaCollection").where("SHOW_YN", "==", "Y").where("User_Email", "==", user).orderBy("DeptCode", "asc")
-                    .onSnapshot((querySnapshot) => {
-                        querySnapshot.forEach((documentSnapshot) => {
-                            data.push({
-                                ...documentSnapshot.data(),
-                                key: documentSnapshot.id,
-                            });
-
-                        });
-                        setdata(data);
-                        setisLoading(false);
-                    });
-                // Unsubscribe from events when no longer in use
-                return () => {
-                    setdata([]);
-                    setisLoading(false);
-                };
-            });
-        } catch {setisLoading(false); }
-    }
+        var V_P_SEND = "Send2";
+        var time = moment(new Date()).format("HHmmss");
+        if (time <= '120000') {
+          V_P_SEND = 'Send1';
+        }
+        if (time >= '130000') {
+          V_P_SEND = 'Send2';
+        }
+        if (email != null && token != null) {
+          return await getDataScadaAlarm(V_P_SEND, email, token).then((response) => {
+            setdata(response)
+            setisLoading(false);
+          }).catch((error) => {
+            setisLoading(false);
+            console.log("Không tìm thấy dữ liệu: " + error);
+          });
+        }
+      }
     const _onRefresh = () => {
-        loadData();
+        fetchScadaAlarmData();
     };
     useEffect(() => {
         setisLoading(true);
         try {
             const unsubscribe = navigation.addListener("focus", () => {
-                loadData();
+                fetchScadaAlarmData();
             });
             return unsubscribe;
         } catch (error) {
@@ -123,7 +158,7 @@ export default function HomeScreen({ navigation }) {
                     }}>
 
                         <HStack space={2} alignItems="center" justifyContent="space-between" >
-                            <Avatar.Text size={50} backgroundColor="#3686d1" label={this.props.item.User_Avatar} />
+                            <Avatar.Text size={50} backgroundColor="#3686d1" label={this.props.item.LINE_NM} />
                             <VStack>
                                 <Text
                                     fontSize={18}
@@ -132,7 +167,7 @@ export default function HomeScreen({ navigation }) {
                                     }}
                                     color="blue.500"
                                     bold
-                                > {this.props.item.McName}
+                                > {this.props.item.MC_NM}
                                 </Text>
                                 <Divider />
                                 <VStack>
@@ -142,7 +177,7 @@ export default function HomeScreen({ navigation }) {
                                             color: "red.500",
                                         }}
 
-                                        color="red.500" bold> - {this.props.item.McCode} [{this.props.item.McId}]
+                                        color="red.500" bold> - {this.props.item.MC_CD} [{this.props.item.MC_ID}]
 
                                     </Text>
                                     <Text
@@ -150,7 +185,7 @@ export default function HomeScreen({ navigation }) {
                                         _dark={{
                                             color: "green.600",
                                         }}
-                                        color="green.600" bold> - Plant {this.props.item.Plant} - {this.props.item.OpName}
+                                        color="green.600" bold> - Plant {this.props.item.PLANT} - {this.props.item.OP_NM}
                                     </Text>
                                     <Text
                                         fontSize={16}
@@ -159,7 +194,7 @@ export default function HomeScreen({ navigation }) {
                                             color: "purple.500",
                                         }}
                                         bold
-                                    > - PV: {this.props.item.PvValue}, Min: {this.props.item.MinValue},  Max: {this.props.item.MaxValue}
+                                    > - PV: {this.props.item.PV_VALUE}, Min: {this.props.item.MIN_VALUE},  Max: {this.props.item.MAX_VALUE}
                                     </Text>
                                     <Text
                                         fontSize={15}
@@ -168,7 +203,7 @@ export default function HomeScreen({ navigation }) {
                                             color: "warning.800",
                                         }}
                                         bold
-                                    >- Time: {this.props.item.Hms}
+                                    >- Time: {this.props.item.HMS}
                                     </Text>
                                 </VStack>
                             </VStack>
@@ -193,24 +228,31 @@ export default function HomeScreen({ navigation }) {
         }
     };
 
-    const deleteRow = (rowMap, rowKey, index) => {
-        closeRow(rowMap, index);
-        const newData = [...data];
-        const prevIndex = data.findIndex(item => item.key === rowKey);
-        newData.splice(prevIndex, 1);
-        deleteData_Test(rowKey);
-    };
+    // const deleteRow = (rowMap, rowKey, index) => {
+    //     closeRow(rowMap, index);
+    //     const newData = [...data];
+    //     const prevIndex = data.findIndex(item => item.key === rowKey);
+    //     newData.splice(prevIndex, 1);
+    //     deleteData_Test(rowKey);
+    // };
+    async function deleteRow(rowMap, rowKey) {
+        closeRow(rowMap, rowKey);
+        const email = await AsyncStorage.getItem('@email');
+        if (email != null) {
+          deleteData(email, rowKey);
+        }
+      };
 
     const onRowDidOpen = rowKey => {
         console.log('This row opened is: ', rowKey);
     };
     const renderHiddenItem = (data, rowMap) => <HStack flex={0.94}>
-        <Pressable px={4} ml="auto" bg="dark.500" borderRadius={9} justifyContent="center" onPress={() => closeRow(rowMap, data.index)} _pressed={{
+        <Pressable px={4} ml="auto" bg="dark.500" borderRadius={9} justifyContent="center" onPress={() => closeRow(rowMap,  data.item.ORD)} _pressed={{
             opacity: 0.5
         }}>
             <Icon as={<Ionicons name="close" />} color="white" />
         </Pressable>
-        <Pressable px={4} bg="red.500" borderRadius={9} justifyContent="center" onPress={() => deleteRow(rowMap, data.item.key, data.index)} _pressed={{
+        <Pressable px={4} bg="red.500" borderRadius={9} justifyContent="center" onPress={() => deleteRow(rowMap, data.item.ORD)} _pressed={{
             opacity: 0.5
         }}>
             <Icon as={<MaterialIcons name="delete" />} color="white" />
@@ -241,8 +283,8 @@ export default function HomeScreen({ navigation }) {
                         previewOpenValue={-40}
                         previewOpenDelay={3000}
                         onRowDidOpen={onRowDidOpen}
-                        initialNumToRender={7}
-                        keyExtractor={(item, index) => index}
+                        initialNumToRender={10}
+                        keyExtractor={(item, index) => item.ORD}
                     />
 
                     <Loader isLoading={isLoading} />

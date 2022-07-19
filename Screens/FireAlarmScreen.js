@@ -46,7 +46,7 @@ export default function HomeScreen({ route, navigation }) {
     const email = await AsyncStorage.getItem('@email');
     const token = await AsyncStorage.getItem('@token');
     setisLoading(true);
-    var V_P_SEND = "";
+    var V_P_SEND = "Send2";
     var time = moment(new Date()).format("HHmmss");
     if (time <= '120000') {
       V_P_SEND = 'Send1';
@@ -94,87 +94,79 @@ export default function HomeScreen({ route, navigation }) {
 
   class RenderItem extends React.PureComponent {
     render() {
-      if (this.props.isLoading) {
-        return (
-          <SafeAreaView>
-            <ActivityIndicator />
-          </SafeAreaView>);
-      }
-      else {
-        return (
-          <Box
-            borderRadius={9}
-            borderBottomWidth={1}
-            borderLeftWidth={1}
-            borderRightWidth={1}
-            _dark={{
-              borderColor: "gray.600",
-            }}
-            backgroundColor="white"
-            borderColor="coolGray.200"
-            pl="5"
-            pr="5"
-            py="2"
-            mb={2}
-          >
-            <Pressable onPress={() => console.log('You touched me')} borderBottomColor="trueGray.200" borderBottomWidth={1} justifyContent="center" underlayColor={'#AAA'} _pressed={{
-              bg: 'trueGray.200'
-            }}>
+      return (
+        <Box
+          borderRadius={9}
+          borderBottomWidth={1}
+          borderLeftWidth={1}
+          borderRightWidth={1}
+          _dark={{
+            borderColor: "gray.600",
+          }}
+          backgroundColor="white"
+          borderColor="coolGray.200"
+          pl="5"
+          pr="5"
+          py="2"
+          mb={2}
+        >
+          <Pressable onPress={() => console.log('You touched me')} borderBottomColor="trueGray.200" borderBottomWidth={1} justifyContent="center" underlayColor={'#AAA'} _pressed={{
+            bg: 'trueGray.200'
+          }}>
 
-              <HStack space={1} alignItems="center" justifyContent="space-between" >
-                <Avatar.Text size={50} backgroundColor="#F984AB" label={this.props.item.LINE_NM} />
+            <HStack space={1} alignItems="center" justifyContent="space-between" >
+              <Avatar.Text size={50} backgroundColor="#F984AB" label={this.props.item.LINE_NM} />
+              <VStack>
+                <Text
+                  fontSize={18}
+                  _dark={{
+                    color: "blue.500",
+                  }}
+                  color="blue.500"
+                  bold
+                > {this.props.item.MC_NM}
+                </Text>
+                <Divider />
                 <VStack>
                   <Text
-                    fontSize={18}
+                    fontSize={15}
                     _dark={{
-                      color: "blue.500",
+                      color: "red.500",
                     }}
-                    color="blue.500"
-                    bold
-                  > {this.props.item.MC_NM}
+                    color="red.500" bold> - {this.props.item.MC_CD} [{this.props.item.MC_ID}]
                   </Text>
-                  <Divider />
-                  <VStack>
-                    <Text
-                      fontSize={15}
-                      _dark={{
-                        color: "red.500",
-                      }}
-                      color="red.500" bold> - {this.props.item.MC_CD} [{this.props.item.MC_ID}]
-                    </Text>
-                    <Text
-                      fontSize={15}
-                      _dark={{
-                        color: "green.600",
-                      }}
-                      color="green.600" bold> - Plant {this.props.item.PLANT} - {this.props.item.OP_NM}
-                    </Text>
-                    <Text
-                      fontSize={16}
-                      color="purple.500"
-                      _dark={{
-                        color: "purple.500",
-                      }}
-                      bold
-                    > - PV: {this.props.item.PV_VALUE}, Min: {this.props.item.MIN_VALUE},  Max: {this.props.item.MAX_VALUE}
-                    </Text>
-                    <Text
-                      fontSize={15}
-                      color="warning.400"
-                      _dark={{
-                        color: "warning.800",
-                      }}
-                      bold
-                    > - Time: {this.props.item.HMS}
-                    </Text>
-                  </VStack>
+                  <Text
+                    fontSize={15}
+                    _dark={{
+                      color: "green.600",
+                    }}
+                    color="green.600" bold> - Plant {this.props.item.PLANT} - {this.props.item.OP_NM}
+                  </Text>
+                  <Text
+                    fontSize={16}
+                    color="purple.500"
+                    _dark={{
+                      color: "purple.500",
+                    }}
+                    bold
+                  > - PV: {this.props.item.PV_VALUE}, Min: {this.props.item.MIN_VALUE},  Max: {this.props.item.MAX_VALUE}
+                  </Text>
+                  <Text
+                    fontSize={15}
+                    color="warning.400"
+                    _dark={{
+                      color: "warning.800",
+                    }}
+                    bold
+                  > - Time: {this.props.item.HMS}
+                  </Text>
                 </VStack>
-                <Spacer />
-              </HStack>
-            </Pressable>
-          </Box>
-        )
-      }
+              </VStack>
+              <Spacer />
+            </HStack>
+          </Pressable>
+        </Box>
+      )
     }
   }
   const _renderItem = useMemo(() =>
@@ -237,7 +229,7 @@ export default function HomeScreen({ route, navigation }) {
             previewOpenValue={-40}
             previewOpenDelay={3000}
             onRowDidOpen={onRowDidOpen}
-            initialNumToRender={7}
+            initialNumToRender={10}
             keyExtractor={(item, index) => item.ORD}
           />
           <Loader isLoading={isLoading} />
